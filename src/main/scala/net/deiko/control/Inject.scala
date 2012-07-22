@@ -1,6 +1,6 @@
 package net.deiko.control
 
-import net.deiko._
+import net.deiko.coproduct
 
 trait Inject[F[_], G[_]] {
   def inj[A](sub: F[A]): G[A]

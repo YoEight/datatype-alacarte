@@ -1,6 +1,6 @@
 package net.deiko.control
 
-import net.deiko._
+import net.deiko.coproduct
 
 trait Functor[F[_]]{
   def map[A, B](fa: F[A])(f: A => B): F[B]
