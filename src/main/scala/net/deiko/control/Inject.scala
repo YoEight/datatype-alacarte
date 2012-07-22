@@ -6,6 +6,10 @@ trait Inject[F[_], G[_]] {
   def inj[A](sub: F[A]): G[A]
 }
 
+object Inject extends InjectInstances {
+  type :<:[F[_], G[_]] = Inject[F, G]
+}
+
 trait InjectInstances2 { 
   implicit def reflexiveInject[F[_]](implicit F: Functor[F]) = new Inject[F, F] { 
     def inj[A](sub: F[A]) = sub 
