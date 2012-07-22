@@ -1,6 +1,6 @@
 package net.deiko.algebra
 
-import net.deiko._
+import net.deiko.coproduct
 import net.deiko.control.Functor
 
 trait Eval[F[_]] {
