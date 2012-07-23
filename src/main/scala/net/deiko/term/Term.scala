@@ -1,6 +1,7 @@
 package net.deiko.term
 
 import net.deiko.control.Functor
+import net.deiko.syntax.inject._
 
 // Free Monad
 trait Term[F[_], A] {
@@ -17,6 +18,14 @@ trait Term[F[_], A] {
 object Term {
   implicit def termFunctor[F[_]](implicit F: Functor[F]) = new Functor[({type f[x] = Term[F, x]})#f]{
     def map[A, B](fa: Term[F, A])(f: A => B) = fa map f
+  }
+  
+  def inject[F[_], G[_], A](fe: F[Term[G, A]])(implicit I: F :<: G): Term[G, A] =
+    Impure[G, A](I.inj(fe))
+    
+  def foldTerm[F[_], A, B](t: Term[F, A], pure: A => B, impure: F[B] => B)(implicit F: Functor[F]): B = t match {
+    case Pure(a)    => pure(a)
+    case Impure(fb) => impure(F.map(fb)(term => foldTerm(term, pure, impure)))
   }
 }
 
