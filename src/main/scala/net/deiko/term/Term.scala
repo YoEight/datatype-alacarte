@@ -16,10 +16,6 @@ trait Term[F[_], A] {
 }
 
 object Term {
-  implicit def termFunctor[F[_]](implicit F: Functor[F]) = new Functor[({type f[x] = Term[F, x]})#f]{
-    def map[A, B](fa: Term[F, A])(f: A => B) = fa map f
-  }
-  
   def inject[F[_], G[_], A](fe: F[Term[G, A]])(implicit I: F :<: G): Term[G, A] =
     Impure[G, A](I.inj(fe))
     
